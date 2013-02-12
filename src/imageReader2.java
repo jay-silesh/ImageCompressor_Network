@@ -7,10 +7,16 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 
-public class imageReader2 {
+public class imageReader2 extends Thread{
 
 	
-	static BufferedImage img_b1,img_b2,img_w;
+	public static BufferedImage img_b1,img_b2,img_w,img;
+	public static JLabel label;
+	public static JLabel label2;
+	public static JFrame frame;
+	static int sleep_for_each_rotation;
+	public static BufferedImage [] test;
+	public static BufferedImage [] test2;
 	public static void diag_calculated1(int l,float width2,float height2)
 	{
 		
@@ -119,6 +125,8 @@ public class imageReader2 {
 				count--;		
 		}
 		
+		BufferedImage[] test={img_b1,img_b2};
+		BufferedImage[] test2={img_w,img_b2};
 }
 	
 	
@@ -126,12 +134,21 @@ public class imageReader2 {
 	public static void main(String[] args) {
    	
 
-	int lines=4;
-	int nor=10;
+	int lines=36;
+	int nor=3;
+	float fps=(float) 6;
+	float fps1=fps*100;
+	float temp=1000/(fps1);
+	int time_to_wait=(int) (temp*100);
+	time_to_wait=time_to_wait/2;
+	
+	//System.out.println("\nFrames that shdould be showed is "+time_to_wait);
+	
+	
 	int times_to_execute_for_one=lines*2; //basically 8 for 4 lines for one rotation  =8
 	int times_to_execute_for_nor=times_to_execute_for_one*nor; //8*10= 80ms or 80 times it has to execute to complete for 10 rotations 
 	int total_time_sleep=1000-times_to_execute_for_nor; // 1000-80=920ms left to sleep
-	int sleep_for_each_rotation=total_time_sleep/(times_to_execute_for_nor); //920/80=11.5
+	sleep_for_each_rotation=total_time_sleep/(times_to_execute_for_nor); //920/80=11.5
 	
 	float width = 512; //Integer.parseInt(args[1]);
 	float height = 512; //Integer.parseInt(args[2]);
@@ -140,33 +157,60 @@ public class imageReader2 {
 	diag_calculated1(lines,width,height);
 	
 	JFrame frame=new JFrame();
-	JLabel label  = new JLabel(new ImageIcon(img_b1));
+	label  = new JLabel(new ImageIcon(img_w));
+	label2  = new JLabel(new ImageIcon(img_w));
 	frame.getContentPane().add(label, BorderLayout.WEST);
+	frame.getContentPane().add(label2, BorderLayout.EAST);
+	
 	frame.pack();
 	frame.setVisible(true); 
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-	BufferedImage [] test={img_b1,img_b2};
-	BufferedImage [] test2={img_b1,img_w};
-	int i=0;
-	while(true)
-	{
-		label.setIcon(new ImageIcon(test[i]));
-		try {
-			Thread.sleep(sleep_for_each_rotation);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	
+	 (new imageReader2()).start();
+	 
+	 int i=0;
+		while(true)
+		{
+			
+			try {
+				Thread.sleep(time_to_wait);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			label2.setIcon(new ImageIcon(img));
 		}
-		i++;
-		if(i>1)
-			i=0;
-	
-	}
-	
-
-	
-  
+		
+		
+		
    }
+	
+	public void run()
+	{
+		
+		int i=0;
+		while(true)
+		{
+			
+			if(i==0)
+				img=img_b1;
+			else
+				img=img_b2;	
+			
+			label.setIcon(new ImageIcon(img));
+			
+			try {
+				Thread.sleep(sleep_for_each_rotation);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			i++;
+			if(i>1)
+				i=0;
+		
+		}
+	}
   
 }
