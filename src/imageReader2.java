@@ -134,21 +134,17 @@ public class imageReader2 extends Thread{
 	public static void main(String[] args) {
    	
 
-	int lines=36;
-	int nor=3;
-	float fps=(float) 6;
+	int lines=40;
+	int nor=10;
+	
+	float fps=(float) 100;
 	float fps1=fps*100;
 	float temp=1000/(fps1);
 	int time_to_wait=(int) (temp*100);
 	time_to_wait=time_to_wait/2;
 	
-	//System.out.println("\nFrames that shdould be showed is "+time_to_wait);
+	sleep_for_each_rotation=1000/nor;
 	
-	
-	int times_to_execute_for_one=lines*2; //basically 8 for 4 lines for one rotation  =8
-	int times_to_execute_for_nor=times_to_execute_for_one*nor; //8*10= 80ms or 80 times it has to execute to complete for 10 rotations 
-	int total_time_sleep=1000-times_to_execute_for_nor; // 1000-80=920ms left to sleep
-	sleep_for_each_rotation=total_time_sleep/(times_to_execute_for_nor); //920/80=11.5
 	
 	float width = 512; //Integer.parseInt(args[1]);
 	float height = 512; //Integer.parseInt(args[2]);
