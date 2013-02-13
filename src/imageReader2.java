@@ -125,8 +125,6 @@ public class imageReader2 extends Thread{
 				count--;		
 		}
 		
-		BufferedImage[] test={img_b1,img_b2};
-		BufferedImage[] test2={img_w,img_b2};
 }
 	
 	
@@ -134,17 +132,33 @@ public class imageReader2 extends Thread{
 	public static void main(String[] args) {
    	
 
-	int lines=40;
-	int nor=10;
+	/*int lines = 4; 
+	float nor=(float) 4;
+	float fps=(float) 8;
+	*/
+    
+	if(args.length!=3)
+	{
+		System.out.println("\nInvalid Arguments");
+		System.exit(1);
+	}
 	
-	float fps=(float) 100;
-	float fps1=fps*100;
-	float temp=1000/(fps1);
-	int time_to_wait=(int) (temp*100);
-	time_to_wait=time_to_wait/2;
 	
-	sleep_for_each_rotation=1000/nor;
+	int lines=Integer.parseInt(args[0]);
+	float nor=Float.parseFloat(args[1]);
+	float fps=Float.parseFloat(args[2]);
 	
+	
+	float nor1=nor*10;
+	float temp1=1000/(nor1*2);
+	temp1=temp1*10;
+	sleep_for_each_rotation=(int) temp1;
+	
+	
+	float fps1=fps*10;
+	temp1=1000/(fps1*2);
+	temp1=temp1*10;
+	int time_to_wait=(int) temp1;
 	
 	float width = 512; //Integer.parseInt(args[1]);
 	float height = 512; //Integer.parseInt(args[2]);
@@ -157,25 +171,25 @@ public class imageReader2 extends Thread{
 	label2  = new JLabel(new ImageIcon(img_w));
 	frame.getContentPane().add(label, BorderLayout.WEST);
 	frame.getContentPane().add(label2, BorderLayout.EAST);
-	
 	frame.pack();
 	frame.setVisible(true); 
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 	
+	img=img_b1;
+	
 	 (new imageReader2()).start();
 	 
-	 int i=0;
-		while(true)
+	 while(true)
 		{
-			
+			label2.setIcon(new ImageIcon(img));
 			try {
 				Thread.sleep(time_to_wait);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			label2.setIcon(new ImageIcon(img));
+		
 		}
 		
 		
@@ -189,11 +203,6 @@ public class imageReader2 extends Thread{
 		while(true)
 		{
 			
-			if(i==0)
-				img=img_b1;
-			else
-				img=img_b2;	
-			
 			label.setIcon(new ImageIcon(img));
 			
 			try {
@@ -205,6 +214,10 @@ public class imageReader2 extends Thread{
 			i++;
 			if(i>1)
 				i=0;
+			if(i==1)
+				img=img_b2;
+			else
+				img=img_b1;	
 		
 		}
 	}
