@@ -23,27 +23,54 @@ public class imageReader2  extends JPanel implements Runnable{
 	public static imageReader2 image1;
 	public static imageReader2 image2;
 	public static int divide_size;
+	public static int time_to_wait2;
 	
 	public static void main(String[] args) {
-   	
-	lines = 3; 
-	float nor=(float)4;
-	float fps=(float)10;
-	image1=new imageReader2();;
+		float nor,fps;
+	
+		lines = 9; 
+		nor=(float)10;
+		fps=(float)10;
+	
+	
+	/*      if(args.length!=3)
+		{
+			System.out.println("\nInvalid Arguments");
+			System.exit(1);
+		}
+        	lines=Integer.parseInt(args[0]);
+		nor=Float.parseFloat(args[1]);
+		fps=Float.parseFloat(args[2]);
+         */
+	
+	image1=new imageReader2();
 	image2=new imageReader2();
 	divide_size=6;
 	
 	
 	radian=Math.toRadians(360.0/lines);	
+	
 	float nor1=nor*10;
 	float temp1=1000/(nor1*lines*divide_size);
 	temp1=temp1*10;
 	sleep_for_each_rotation=(int) temp1;	
+	if(sleep_for_each_rotation<1)
+		sleep_for_each_rotation=0;
+
+        
+      
+	
+	System.out.println("sleepin for " +sleep_for_each_rotation);
+	
 	float fps1=fps*10;
 	temp1=1000/(fps1);
 	temp1=temp1*10;
 	int time_to_wait=(int) temp1;	
-	int time_to_wait2=time_to_wait/divide_size;
+//	time_to_wait=time_to_wait/divide_size;
+    
+	if(time_to_wait<1)
+		time_to_wait=0;
+	
 	width = 512; //Integer.parseInt(args[1]);
 	height = 512; //Integer.parseInt(args[2]);	
 
@@ -69,7 +96,7 @@ public class imageReader2  extends JPanel implements Runnable{
 	{
 		image2.setUI(image1.getUI());
 		try {
-			Thread.sleep(time_to_wait2);
+			Thread.sleep(time_to_wait);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,7 +139,10 @@ public class imageReader2  extends JPanel implements Runnable{
 		
 		while(true)
 		{	//frame.repaint();
+			
 			image1.repaint();
+			
+			
 			try {
 				Thread.sleep(sleep_for_each_rotation);
 			} catch (InterruptedException e) {
@@ -120,11 +150,13 @@ public class imageReader2  extends JPanel implements Runnable{
 				e.printStackTrace();
 			}
 			start_sum+=radian/divide_size;
+			//start_sum++;
 			if(start_sum>=360)
 				start_sum=0;
 			
+		
 		}
-	
+                
 	
 	}
 }
